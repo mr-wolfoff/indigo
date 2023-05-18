@@ -1,12 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, FormView
 
-from webapp.forms import ArticleForm, FavoriteForm
-from webapp.models import Article, Favorite
+from webapp.forms import ArticleForm, FavoriteForm, PictureForm, VideoForm
+from webapp.models import Article, Video, Picture, Favorite, Tag
 
 
 class ArticleCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):

@@ -7,7 +7,7 @@ class Comment(models.Model):
         'webapp.Article',
         related_name='comments',
         on_delete=models.CASCADE,
-        verbose_name='Статья'
+        verbose_name='Статья',
     )
     text = models.TextField(
         max_length=400,
@@ -18,7 +18,8 @@ class Comment(models.Model):
         null=True,
         blank=False,
         default='No name',
-        verbose_name='Автор'
+        verbose_name='Автор',
+        on_delete=models.CASCADE
     )
     created_at = models.DateTimeField(
         auto_now_add=True,

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}Main page{% endblock %}
+{% block content %}
+  {% for article in articles %}
+        <h2>{{ article.title }}</h2>
+        <h2>{{ article.text }}</h2>
+        <p>
+<!--            <a href="{% url 'article_detail' article.pk %}">Подробнее...</a>-->
+        </p>
+        <p>Favorite count {{ article.users.count }}</p>
+        {% if user.is_authenticated %}
+<!--            <form action="{% url 'to_favorite' article.pk %}" method="post">-->
+<!--                {% csrf_token %}-->
+<!--                {% bootstrap_form favorite_form %}-->
+<!--                {% bootstrap_button button_type="submit" content='Добавить в избранное' %}-->
+<!--            </form>-->
+        {% endif %}
+    {% endfor %}
+{% endblock %}

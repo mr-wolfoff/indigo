@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, BaseValidator
 
-from webapp.models import Article
+from webapp.models import Article, Picture, Video
 
 
 def max_len_validator(string):
@@ -47,6 +47,18 @@ class ArticleForm(forms.ModelForm):
         if Article.objects.filter(title=title).exists():
             raise ValidationError('Заголовок с таким именем уже есть')
         return title
+
+
+class PictureForm(forms.ModelForm):
+    class Meta:
+        model = Picture
+        fields = ('source',)
+
+
+class VideoForm(forms.ModelForm):
+    class Meta:
+        model = Video
+        fields = ('source',)
 
 
 class SearchForm(forms.Form):

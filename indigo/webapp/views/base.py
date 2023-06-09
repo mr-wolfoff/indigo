@@ -7,7 +7,7 @@ from webapp.models import Article
 
 
 class IndexView(ListView):
-    template_name = 'index.html'
+    template_name = 'articles.html'
     model = Article
     context_object_name = 'articles'
     ordering = ('created_at',)

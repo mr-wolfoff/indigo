@@ -1,0 +1,10 @@
+{% load django_bootstrap5 %}
+<form action="{% url 'article_add' %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{% bootstrap_form form %}
+{% bootstrap_form picture_form %}
+{% bootstrap_form video_form %}
+<div class="form_row">
+    {% bootstrap_button button_type="submit" content=button_text %}
+</div>
+ </form>

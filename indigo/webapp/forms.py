@@ -2,6 +2,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, BaseValidator
 
+from multiupload.fields import MultiFileField
+
 from webapp.models import Article, Picture, Video
 
 
@@ -17,8 +19,6 @@ class CustomLenValidator(BaseValidator):
         super().__init__(limit_value=limit_value, message=message)
 
     def compare(self, value, limit_value):
-        print(value)
-        print(limit_value)
         return value > limit_value
 
     def clean(self, value):
@@ -31,11 +31,10 @@ class ArticleForm(forms.ModelForm):
 
     class Meta:
         model = Article
-        fields = ('title', 'text', 'author', 'status', 'tags')
+        fields = ('title', 'text', 'status', 'tags')
         labels = {
             'title': 'Заголовок статьи',
             'text': 'Текст',
-            'author': 'Автор статьи',
             'status': 'Статус',
             'tags': 'Теги'
         }
@@ -50,15 +49,40 @@ class ArticleForm(forms.ModelForm):
 
 
 class PictureForm(forms.ModelForm):
+    source = MultiFileField(min_num=0, max_num=10)
+
     class Meta:
         model = Picture
         fields = ('source',)
 
+    def save(self, commit=True):
+        print(11111111111)
+        instance = self.cleaned_data
+        images = self.cleaned_data.get('source')
+        if images:
+            for image in images:
+                picture = Picture(article=instance, source=image)
+                if commit:
+                    picture.save()
+        return instance
+
 
 class VideoForm(forms.ModelForm):
+    source = MultiFileField(min_num=0, max_num=10)
+
     class Meta:
         model = Video
         fields = ('source',)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        videos = self.cleaned_data.get('source')
+        if videos:
+            for video in videos:
+                video = Video(article=instance, source=video)
+                if commit:
+                    video.save()
+        return instance
 
 
 class SearchForm(forms.Form):

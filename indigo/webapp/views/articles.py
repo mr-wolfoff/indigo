@@ -10,10 +10,33 @@ from webapp.models import Article, Video, Picture, Favorite, Tag
 
 
 class ArticleCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
-    template_name = 'article_create.html'
+    template_name = 'articles/article_create.html'
     model = Article
     form_class = ArticleForm
     success_message = 'Статья создана'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['picture_form'] = PictureForm()
+        context['video_form'] = VideoForm()
+        return context
+
+    def form_valid(self, form):
+        article = form.save()
+        picture_form = PictureForm(self.request.POST, self.request.FILES)
+        video_form = VideoForm(self.request.POST, self.request.FILES)
+
+        if picture_form.is_valid():
+            picture = picture_form.save(commit=False)
+            picture.article = article
+            picture.save()
+
+        if video_form.is_valid():
+            video = video_form.save(commit=False)
+            video.article = article
+            video.save()
+
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('article_detail', kwargs={'pk': self.object.pk})
